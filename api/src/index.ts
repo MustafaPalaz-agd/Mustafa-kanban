@@ -1,5 +1,14 @@
-import express from "express";
+import express, {
+  type NextFunction,
+  type Request,
+  type Response,
+} from "express";
 import cors from "cors";
+import { ApiError } from "./lib/errors";
+import { seedIfEmpty } from "./lib/board";
+import { columnsRouter } from "./routes/columns";
+import { cardsRouter } from "./routes/cards";
+import { dataRouter } from "./routes/data";
 
 export const app = express();
 
@@ -10,37 +19,52 @@ app.get("/api/health", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-// Bilinmeyen /api yolu -> ayni hata zarfi
+app.use("/api/columns", columnsRouter);
+app.use("/api/cards", cardsRouter);
+app.use("/api", dataRouter);
+
+// Bilinmeyen /api yolu -> aynı hata zarfı
 app.use("/api", (_req, res) => {
   res.status(404).json({
     error: { code: "NOT_FOUND", message: "Bu uç nokta yok" },
   });
 });
 
-// Merkezi hata zarfi: her hata { error: { code, message } }
-app.use(
-  (
-    err: unknown,
-    _req: express.Request,
-    res: express.Response,
-    _next: express.NextFunction,
-  ) => {
-    const status =
-      typeof err === "object" && err !== null && "status" in err
-        ? Number((err as { status: number }).status) || 500
-        : 500;
-    const code =
-      typeof err === "object" && err !== null && "code" in err
-        ? String((err as { code: string }).code)
-        : "INTERNAL_ERROR";
-    const message =
-      err instanceof Error ? err.message : "Beklenmeyen bir hata oluştu";
-    res.status(status).json({ error: { code, message } });
-  },
-);
+// Merkezi hata zarfı: her hata { error: { code, message } }
+app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+  if (err instanceof ApiError) {
+    res.status(err.status).json({
+      error: { code: err.code, message: err.message },
+    });
+    return;
+  }
+
+  if (err instanceof SyntaxError) {
+    res.status(400).json({
+      error: { code: "VALIDATION_ERROR", message: "Gövde geçerli JSON değil" },
+    });
+    return;
+  }
+
+  const status =
+    typeof err === "object" && err !== null && "status" in err
+      ? Number((err as { status: number }).status) || 500
+      : 500;
+  const message =
+    err instanceof Error ? err.message : "Beklenmeyen bir hata oluştu";
+
+  console.error("[api]", err);
+  res.status(status).json({
+    error: { code: "INTERNAL_ERROR", message },
+  });
+});
 
 const PORT = 3001;
 
+const seeded = seedIfEmpty();
+
 app.listen(PORT, () => {
-  console.log(`[api] http://localhost:${PORT} hazir`);
+  console.log(
+    `[api] http://localhost:${PORT} hazir${seeded ? " (data/board.json yuklendi)" : ""}`,
+  );
 });
