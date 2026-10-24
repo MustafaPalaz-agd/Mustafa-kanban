@@ -74,6 +74,11 @@
     #b07b16 100%
   );
   --color-focus: #6ea8ef;
+  --photo-veil: linear-gradient(
+    180deg,
+    rgba(253, 251, 255, 0.66),
+    rgba(248, 244, 255, 0.8)
+  );
 }
 
 html,

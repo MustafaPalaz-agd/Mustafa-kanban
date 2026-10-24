@@ -23,13 +23,21 @@ export default function ThemePicker({ value, onChange }: Props) {
                 : "border-line hover:border-[var(--color-focus)]/50",
             ].join(" ")}
           >
-            <span
-              aria-hidden
-              className="block h-12 w-full"
-              style={{
-                backgroundImage: `linear-gradient(115deg, ${theme.preview[0]}, ${theme.preview[1]} 52%, ${theme.preview[2]})`,
-              }}
-            />
+            <span className="relative block h-14 w-full overflow-hidden">
+              <img
+                src={theme.photo}
+                alt=""
+                loading="lazy"
+                className="absolute inset-0 size-full object-cover"
+              />
+              <span
+                aria-hidden
+                className="absolute inset-x-0 bottom-0 h-1"
+                style={{
+                  backgroundImage: `linear-gradient(90deg, ${theme.preview[0]}, ${theme.preview[1]} 52%, ${theme.preview[2]})`,
+                }}
+              />
+            </span>
             <span className="block bg-panel px-2.5 py-2">
               <span className="block text-[12px] font-semibold text-strong">
                 {theme.name}

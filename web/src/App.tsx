@@ -8,6 +8,7 @@ import CreateBoardModal from "./components/CreateBoardModal";
 import SearchResults from "./components/SearchResults";
 import { ErrorState, LoadingState } from "./components/States";
 import ThemeModal from "./components/ThemeModal";
+import ThemeBackdrop from "./components/ThemeBackdrop";
 import Toolbar from "./components/Toolbar";
 import WelcomeScreen from "./components/WelcomeScreen";
 import { useKanban } from "./hooks/useKanban";
@@ -181,6 +182,8 @@ export default function App() {
 
   return (
     <div className="flex h-full flex-col">
+      <ThemeBackdrop themeId={theme} />
+
       {!boardEmpty && (
         <Toolbar
           searchRef={searchRef}

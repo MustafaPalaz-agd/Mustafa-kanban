@@ -101,6 +101,9 @@ ok  konsol hatası yok
 15 kontrol geçti
 ```
 
+Her tema kendi arka plan fotoğrafıyla gelir (CC0, `web/public/themes/`,
+1600×900, çevrimdışı). Kaynak listesi: `docs/TEMALAR.md`.
+
 ## Nasıl tekrar koşulur
 
 ```bash

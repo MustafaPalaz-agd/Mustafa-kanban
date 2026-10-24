@@ -143,7 +143,7 @@ export default function ColumnView({
         </SortableContext>
 
         {column.cards.length === 0 && !adding && (
-          <p className="px-2 py-4 text-[11.5px] leading-relaxed text-muted/70">
+          <p className="px-2 py-4 text-[11.5px] leading-relaxed text-muted">
             Henüz kart yok. Aşağıdan ilk kartı ekle ya da başka kolondan sürükle.
           </p>
         )}

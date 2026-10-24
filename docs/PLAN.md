@@ -102,8 +102,9 @@ Detay ve örnekler: `docs/API.md`.
    oluştur” akışıyla (3 boş kolon) `POST /api/import` üzerinden kurulur.
 10. **Tema motoru:** 7 tema (`Varsayılan`, `Vaporwave`, `Cottagecore`,
     `Dark Academia`, `Y2K`, `Cyberpunk`, `Coquette`) aynı CSS değişkenlerini
-    besler. Seçim `localStorage`'da tutulur; yeni tema eklemek tek dosya
-    (`web/src/lib/themes.ts`) değişikliğidir.
+    besler ve her birinin kendi arka plan fotoğrafı vardır
+    (`web/public/themes/*.jpg`, CC0). Seçim `localStorage`'da tutulur; yeni tema
+    eklemek `web/src/lib/themes.ts` + bir fotoğraf demektir.
 
 ## 6. Yapım sırası
 

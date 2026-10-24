@@ -48,8 +48,11 @@ Uygulama **boş panoyla** açılır: hiç kolon ya da kart yoktur.
 
 Tema seçenekleri: **Varsayılan** (mavi–pembe–sarı), **Vaporwave**,
 **Cottagecore**, **Dark Academia**, **Y2K**, **Cyberpunk**, **Coquette**.
-Tema üst çubuktaki “Tema” düğmesinden sonradan değiştirilebilir ve tarayıcıda
-hatırlanır. Tüm temalar aynı CSS değişkenlerini besler (`web/src/lib/themes.ts`).
+Her temanın kendi arka plan fotoğrafı vardır; tema üst çubuktaki “Tema”
+düğmesinden sonradan değiştirilebilir ve tarayıcıda hatırlanır. Tüm temalar aynı
+CSS değişkenlerini besler (`web/src/lib/themes.ts`), fotoğraflar
+`web/public/themes/` altındadır (çevrimdışı çalışır). Kaynak/lisans listesi:
+`docs/TEMALAR.md`.
 
 Tüm kolonları silersen pano yeniden “Yeni tablo oluştur” ekranına döner.
 
