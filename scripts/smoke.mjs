@@ -212,6 +212,51 @@ async function main() {
     ok("sonuc yoksa bos dizi", Array.isArray(s5.data?.cards) && s5.data.cards.length === 0,
       JSON.stringify(s5.data));
 
+    // ---------- B3 · kolon sırası ----------
+    section("B3 · kolon sırası (PATCH order)");
+    const orderBefore = (await req("GET", "/api/board")).data.columns.map((c) => c.id);
+    const lastCol = orderBefore[orderBefore.length - 1];
+    const reorder = await req("PATCH", `/api/columns/${lastCol}`, { order: 0 });
+    ok("PATCH kolon order -> 200", reorder.status === 200, `status=${reorder.status}`);
+    const orderAfter = (await req("GET", "/api/board")).data.columns;
+    ok("kolon başa taşındı", orderAfter[0]?.id === lastCol, orderAfter.map((c) => c.id).join(","));
+    ok("kolon order 0..n-1", seq(orderAfter.map((c) => c.order)), JSON.stringify(orderAfter.map((c) => c.order)));
+
+    // ---------- B4 · kart silme sonrası sıkışma ----------
+    section("B4 · kart silme sonrası sıra");
+    const colCards = (await req("GET", "/api/board")).data.columns.find((c) => c.id === colA)?.cards ?? [];
+    ok("silme öncesi kart var", colCards.length >= 2, `kart=${colCards.length}`);
+    if (colCards.length >= 2) {
+      const middle = colCards[Math.ceil(colCards.length / 2) - 1].id;
+      const removed = await req("DELETE", `/api/cards/${middle}`);
+      ok("DELETE kart -> 204", removed.status === 204, `status=${removed.status}`);
+      const afterDelete = (await req("GET", "/api/board")).data.columns.find((c) => c.id === colA)?.cards ?? [];
+      ok("silme sonrası order boşluksuz", seq(afterDelete.map((c) => c.order)), JSON.stringify(afterDelete.map((c) => c.order)));
+    }
+
+    // ---------- B7 · ek doğrulama ----------
+    section("B7 · ek doğrulama");
+    const blankColumn = await req("PATCH", `/api/columns/${colA}`, { title: "   " });
+    ok("PATCH kolon boş başlık -> 400", blankColumn.status === 400, `status=${blankColumn.status}`);
+    const tempCard = await req("POST", "/api/cards", { columnId: colA, title: "geçici doğrulama" });
+    const blankCard = await req("PATCH", `/api/cards/${tempCard.data?.id}`, { title: "   " });
+    ok("PATCH kart boş başlık -> 400", blankCard.status === 400, `status=${blankCard.status}`);
+    const brokenJson = await fetch(BASE + "/api/columns", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: "{",
+    });
+    ok("bozuk JSON -> 400", brokenJson.status === 400, `status=${brokenJson.status}`);
+
+    // ---------- B5 · kenar taşımalar ----------
+    section("B5 · kenar taşımalar");
+    const unknownTarget = await req("POST", `/api/cards/${a2}/move`, { toColumnId: "yok-boyle-kolon", toIndex: 0 });
+    ok("olmayan hedef kolon -> 404", unknownTarget.status === 404, `status=${unknownTarget.status}`);
+    const toZero = await req("POST", `/api/cards/${a3}/move`, { toColumnId: colM, toIndex: 0 });
+    ok("aynı kolonda index 0 -> 200", toZero.status === 200, `status=${toZero.status}`);
+    const firstCard = (await req("GET", "/api/board")).data.columns.find((c) => c.id === colM)?.cards?.[0];
+    ok("kart gerçekten başa geldi", firstCard?.id === a3, String(firstCard?.id));
+
     // ---------- B9 ----------
     section("B9 · import / export");
     ok("export {board:{...}} dondurur",
@@ -235,6 +280,56 @@ async function main() {
       afterImport.data?.columns?.length === 2 &&
       afterImport.data.columns[0].cards.length === 1,
       JSON.stringify(afterImport.data?.columns?.map((c) => [c.title, c.cards.length])));
+
+    const snapshotA = await req("GET", "/api/export");
+    const reimport = await req("POST", "/api/import", snapshotA.data);
+    const snapshotB = await req("GET", "/api/export");
+    ok("export çıktısı import edilebilir", reimport.status === 200, `status=${reimport.status}`);
+    ok("tur sonrası pano birebir aynı",
+      JSON.stringify(snapshotA.data) === JSON.stringify(snapshotB.data));
+
+    const badImport = await req("POST", "/api/import", { board: { columns: "x" } });
+    ok("geçersiz import -> 400", badImport.status === 400, `status=${badImport.status}`);
+    ok("geçersiz import hata zarfı", isEnvelope(badImport.data), JSON.stringify(badImport.data));
+
+    // ---------- Ek kenar durumlar ----------
+    section("Ek · kenar durumlar");
+    // B9 import'u panoyu sildi; kenar testler kendi kolonunu kurar.
+    const edgeCol = (await req("POST", "/api/columns", { title: "Kenar Test" })).data?.id;
+    const badDue = await req("POST", "/api/cards", {
+      columnId: edgeCol,
+      title: "tarih testi",
+      dueDate: "tarih-degil",
+    });
+    ok("geçersiz dueDate -> 400", badDue.status === 400, `status=${badDue.status}`);
+
+    const duplicate = await req("POST", "/api/import", {
+      board: {
+        columns: [
+          { id: "dup-1", title: "A", cards: [{ id: "dup-c", title: "kart" }] },
+          { id: "dup-1", title: "B", cards: [] },
+        ],
+      },
+    });
+    ok("import çakışan id -> 400", duplicate.status === 400, `status=${duplicate.status}`);
+    ok("çakışan id hata zarfı", isEnvelope(duplicate.data));
+
+    const missingTitle = await req("POST", "/api/import", {
+      board: { columns: [{ title: "   ", cards: [] }] },
+    });
+    ok("import boş kolon başlığı -> 400", missingTitle.status === 400, `status=${missingTitle.status}`);
+
+    const descCard = await req("POST", "/api/cards", {
+      columnId: edgeCol,
+      title: "Açıklama testi",
+      description: "içinde gizli anahtar kelime geçiyor",
+      label: "etiket-test",
+    });
+    const descSearch = await req("GET", "/api/cards?q=anahtar");
+    ok("q açıklamada da arıyor", (descSearch.data?.cards ?? []).some((c) => c.id === descCard.data?.id));
+    const labelOnly = await req("GET", "/api/cards?label=ETIKET-TEST");
+    ok("yalnız etiket filtresi (büyük harf)", (labelOnly.data?.cards ?? []).length === 1,
+      JSON.stringify(labelOnly.data?.cards?.map((c) => c.title)));
   } finally {
     if (backup.data?.board) {
       const restored = await req("POST", "/api/import", backup.data);

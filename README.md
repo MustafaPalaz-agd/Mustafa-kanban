@@ -72,6 +72,8 @@ geri yükler.
 npm run seed       # data/board.json -> veritabanı (3 kolon / 9 kart)
 npm run seed:big   # 6 kolon / 120 kart stres panosu (uzun metin, Türkçe, geçmiş tarih)
 npm run db:check   # verinin gerçekten SQLite dosyasında olduğunu doğrular
+npm --prefix api run build   # TypeScript derleme kontrolü (tsx ile çalışır, emit yok)
+npm --prefix web run build   # üretim derlemesi -> web/dist
 ```
 
 `seed:big` sunucu açıkken çalıştırılır; mevcut panoyu değiştirir. Geri dönmek
