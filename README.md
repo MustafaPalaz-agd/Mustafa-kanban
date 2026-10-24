@@ -81,3 +81,4 @@ Invoke-RestMethod -Method Post -Uri localhost:3001/api/import -ContentType "appl
 - Portlar sabittir: 3001 / 5173.
 - Prisma yok; Node 24'ün yerleşik `node:sqlite` sürücüsü kullanılır.
 - Sözleşme: `docs/API.md` · Plan: `docs/PLAN.md` · Kriterler: `docs/KABUL.md`
+- Koşulmuş testlerin çıktıları: `docs/KANIT.md` (sözleşme 44/44, tarayıcı 19/19).

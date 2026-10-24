@@ -113,3 +113,15 @@ Detay ve örnekler: `docs/API.md`.
 ## 7. Kabul kriterleri
 
 `docs/KABUL.md` — 30 madde, 100 puan. Her turda "hangileri geçti" diye bakılır.
+
+## 8. Durum
+
+| Adım | Durum |
+|---|---|
+| 1. İskele + docs + health + proxy | tamam |
+| 2. DB + mapper + hata middleware + zod | tamam |
+| 3–5. Kolon/kart uçları + move invariant | tamam |
+| 6. Arama/filtre + import/export | tamam |
+| 7. Arayüz + dnd-kit + modal + klavye + 120 kart provası | tamam |
+
+Kanıt: `docs/KANIT.md`.
