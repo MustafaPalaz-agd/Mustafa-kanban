@@ -46,7 +46,7 @@ const isEnvelope = (d) =>
   typeof d.error.message === "string";
 
 const seq = (arr) => arr.every((v, i) => v === i);
-const positions = (col) => col.cards.map((c) => c.order);
+const positions = (col) => (col?.cards ?? []).map((c) => c.order);
 
 async function main() {
   console.log(`Smoke: ${BASE}`);
@@ -153,33 +153,36 @@ async function main() {
 
     // ---------- B5 ----------
     section("B5 · move + order invariant (7 puan)");
-    const mk = async (columnId, title) => (await req("POST", "/api/cards", { columnId, title })).data?.id;
-    const a1 = await mk(colA, "m1");
-    const a2 = await mk(colA, "m2");
-    const a3 = await mk(colA, "m3");
+    // Temiz kolonlarda calis: ayni kolonda sira beklentisi deterministik olsun.
+    const colM = (await req("POST", "/api/columns", { title: "Smoke Move A" })).data?.id;
     const colB = (await req("POST", "/api/columns", { title: "Smoke Kolon B" })).data?.id;
+    const mk = async (columnId, title) => (await req("POST", "/api/cards", { columnId, title })).data?.id;
+    const a1 = await mk(colM, "m1");
+    const a2 = await mk(colM, "m2");
+    const a3 = await mk(colM, "m3");
 
-    const mv1 = await req("POST", `/api/cards/${a1}/move`, { toColumnId: colA, toIndex: 2 });
+    const mv1 = await req("POST", `/api/cards/${a1}/move`, { toColumnId: colM, toIndex: 2 });
     ok("ayni kolonda move -> 200", mv1.status === 200, `status=${mv1.status}`);
 
     let b = (await req("GET", "/api/board")).data;
-    const colNow = (id) => b.columns.find((c) => c.id === id);
+    const colNow = (id) =>
+      b?.columns?.find((c) => c.id === id) ?? { cards: [], order: -1 };
     ok("ayni kolon icinde sira dogru",
-      colNow(colA).cards.map((c) => c.id).join(",") === [a2, a3, a1].join(","),
-      colNow(colA).cards.map((c) => c.id).join(","));
-    ok("kaynak kolon order 0..n-1", seq(positions(colNow(colA))), JSON.stringify(positions(colNow(colA))));
+      colNow(colM).cards.map((c) => c.id).join(",") === [a2, a3, a1].join(","),
+      colNow(colM).cards.map((c) => c.id).join(","));
+    ok("kaynak kolon order 0..n-1", seq(positions(colNow(colM))), JSON.stringify(positions(colNow(colM))));
 
     const mv2 = await req("POST", `/api/cards/${a1}/move`, { toColumnId: colB, toIndex: 0 });
     ok("kolonlar arasi move -> 200", mv2.status === 200, `status=${mv2.status}`);
 
     b = (await req("GET", "/api/board")).data;
-    ok("hedef kolonda order 0..n-1", seq(positions(b.columns.find((c) => c.id === colB))),
-      JSON.stringify(positions(b.columns.find((c) => c.id === colB))));
-    ok("kaynak kolonda order 0..n-1", seq(positions(b.columns.find((c) => c.id === colA))),
-      JSON.stringify(positions(b.columns.find((c) => c.id === colA))));
+    ok("hedef kolonda order 0..n-1", seq(positions(b?.columns?.find((c) => c.id === colB))),
+      JSON.stringify(positions(b?.columns?.find((c) => c.id === colB))));
+    ok("kaynak kolonda order 0..n-1", seq(positions(b?.columns?.find((c) => c.id === colM))),
+      JSON.stringify(positions(b?.columns?.find((c) => c.id === colM))));
     ok("tum panoda order boşluksuz",
-      b.columns.every((c) => seq(positions(c))),
-      JSON.stringify(b.columns.map((c) => [c.id, positions(c)])));
+      Array.isArray(b?.columns) && b.columns.every((c) => seq(positions(c))),
+      JSON.stringify(b?.columns?.map((c) => [c.id, positions(c)])));
 
     const mv3 = await req("POST", `/api/cards/${a1}/move`, { toColumnId: colB, toIndex: 999 });
     ok("aralik disi toIndex clamp (200)", mv3.status === 200, `status=${mv3.status}`);

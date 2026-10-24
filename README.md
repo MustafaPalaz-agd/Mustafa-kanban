@@ -45,7 +45,19 @@ npm run smoke
 ```
 
 12 uç noktayı ve `move` sıralama kuralını (order = 0..n-1) doğrular.
-Sunucu açıkken çalıştırılır.
+Sunucu açıkken çalıştırılır. Test sonunda panoyu otomatik olarak eski hâline
+geri yükler.
+
+## Yardımcı komutlar
+
+```bash
+npm run seed       # data/board.json -> veritabanı (3 kolon / 9 kart)
+npm run seed:big   # 6 kolon / 120 kart stres panosu (uzun metin, Türkçe, geçmiş tarih)
+npm run db:check   # verinin gerçekten SQLite dosyasında olduğunu doğrular
+```
+
+`seed:big` sunucu açıkken çalıştırılır; mevcut panoyu değiştirir. Geri dönmek
+için `npm run seed`.
 
 ## Başlangıç verisi
 
