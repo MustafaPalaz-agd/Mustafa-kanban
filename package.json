@@ -1,0 +1,14 @@
+{
+  "name": "kanban",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Trello benzeri Kanban panosu - yarisma 01",
+  "scripts": {
+    "dev": "concurrently -n api,web -c cyan,magenta \"npm --prefix api run dev\" \"npm --prefix web run dev\"",
+    "smoke": "node scripts/smoke.mjs",
+    "typecheck": "npm --prefix api run typecheck && npm --prefix web run typecheck"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

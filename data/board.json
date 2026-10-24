@@ -1,0 +1,97 @@
+{
+  "columns": [
+    {
+      "id": "col-backlog",
+      "title": "Yapılacak",
+      "order": 0,
+      "cards": [
+        {
+          "id": "card-1",
+          "title": "API sözleşmesini oku",
+          "description": "12 uç noktanın tamamını docs/API.md ile karşılaştır.",
+          "label": "api",
+          "dueDate": "2026-11-02T12:00:00.000Z",
+          "order": 0
+        },
+        {
+          "id": "card-2",
+          "title": "SQLite dosyasını oluştur",
+          "description": "api/data/kanban.sqlite kalıcı olmalı; bellekte dizi yasak.",
+          "label": "backend",
+          "dueDate": null,
+          "order": 1
+        },
+        {
+          "id": "card-3",
+          "title": "Türkçe karakter testi: ğüşiöç İstanbul",
+          "description": "Arama İSTANBUL ↔ istanbul eşleşmeli.",
+          "label": "kenar-durum",
+          "dueDate": null,
+          "order": 2
+        }
+      ]
+    },
+    {
+      "id": "col-doing",
+      "title": "Devam Ediyor",
+      "order": 1,
+      "cards": [
+        {
+          "id": "card-4",
+          "title": "Kart taşıma kuralı",
+          "description": "Taşıma sonrası iki kolonda da order 0,1,2... boşluksuz olmalı.",
+          "label": "backend",
+          "dueDate": "2026-10-20T09:00:00.000Z",
+          "order": 0
+        },
+        {
+          "id": "card-5",
+          "title": "Sürükle-bırak",
+          "description": "@dnd-kit/sortable ile kolon içi ve kolonlar arası taşıma.",
+          "label": "frontend",
+          "dueDate": null,
+          "order": 1
+        },
+        {
+          "id": "card-6",
+          "title": "İyimser güncelleme",
+          "description": "İşlem anında yansısın, API hata verirse geri alınsın.",
+          "label": "frontend",
+          "dueDate": null,
+          "order": 2
+        }
+      ]
+    },
+    {
+      "id": "col-done",
+      "title": "Tamamlandı",
+      "order": 2,
+      "cards": [
+        {
+          "id": "card-7",
+          "title": "Proje iskelesi",
+          "description": "api/ ve web/ ayrı projeler, kökten tek komut.",
+          "label": "kurulum",
+          "dueDate": null,
+          "order": 0
+        },
+        {
+          "id": "card-8",
+          "title": "README ve commit ritmi",
+          "description": "En az 5 anlamlı commit, çalışan kurulum komutu.",
+          "label": "süreç",
+          "dueDate": null,
+          "order": 1
+        },
+        {
+          "id": "card-9",
+          "title": "Yükleniyor, boş ve hata ekranları",
+          "description": "Üç durum ayrı ayrı görünür olmalı.",
+          "label": "frontend",
+          "dueDate": null,
+          "order": 2
+        }
+      ]
+    }
+  ]
+}
