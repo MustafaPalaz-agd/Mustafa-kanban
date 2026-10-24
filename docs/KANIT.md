@@ -85,6 +85,22 @@ npm run typecheck  ->  api + web, hata yok
 npm --prefix web run build  ->  ✓ built
 ```
 
+## 7. Boş açılış ve temalar
+
+```
+ok  boş açılış: karşılama ekranı
+ok  boş açılışta kolon yok
+ok  tema anında uygulandı
+ok  tablo oluştu (3 kolon)
+ok  kart eklendi
+ok  tema: Varsayılan / Vaporwave / Cottagecore / Dark Academia / Y2K / Cyberpunk / Coquette
+ok  tema yenilemede korundu
+ok  tablo yenilemede korundu
+ok  konsol hatası yok
+
+15 kontrol geçti
+```
+
 ## Nasıl tekrar koşulur
 
 ```bash

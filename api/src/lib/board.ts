@@ -165,8 +165,8 @@ export function replaceBoard(board: BoardInput): {
 }
 
 /**
- * Veritabanı ilk kez oluşturulduysa data/board.json ile doldurur.
- * Kullanıcı tüm kolonları silse bile ikinci açılışta geri gelmez (meta.seeded).
+ * data/board.json ile panoyu doldurur. İlk açılışta otomatik çağrılmaz:
+ * uygulama boş panoyla açılır, tablo arayüzdeki "Yeni tablo oluştur" ile kurulur.
  */
 export function seedIfEmpty(): boolean {
   const marker = db

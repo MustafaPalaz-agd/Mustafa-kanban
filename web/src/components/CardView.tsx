@@ -32,10 +32,10 @@ export default function CardView({ card, onOpen, dragging = false }: Props) {
       }
       className={[
         "paper-card group relative w-full cursor-grab overflow-hidden rounded-[10px]",
-        "border border-black/10 px-3 py-2.5 text-cardink transition",
+        "border border-cardink/10 px-3 py-2.5 text-cardink transition",
         dragging
           ? "rotate-[1.5deg] cursor-grabbing shadow-[0_24px_50px_-18px_rgba(70,50,110,0.55)]"
-          : "hover:-translate-y-px hover:border-black/20",
+          : "hover:-translate-y-px hover:border-cardink/20",
       ].join(" ")}
     >
       {card.label && (

@@ -42,3 +42,7 @@ npm --prefix web run dev
 9. `move` davranışı değişecekse önce `scripts/smoke.mjs` içindeki invariant
    testi kırılır, sonra düzeltilir.
 10. Türkçe metinlerde `İ/ı` dönüşümü `toLocaleLowerCase("tr")` ile yapılır.
+11. Renkler bileşenlere gömülmez: tema değişkenleri (`--color-*`, `--wash-*`,
+    `--top-*`, `--btn-grad`, `--theme-page`) kullanılır. Yeni tema eklemek için
+    yalnız `web/src/lib/themes.ts` düzenlenir.
+12. İlk açılış boş panodur; demo verisi `npm run seed` ile yüklenir.

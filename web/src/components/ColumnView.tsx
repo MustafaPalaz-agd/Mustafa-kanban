@@ -16,18 +16,6 @@ type Props = {
   onDelete: (column: Column) => void;
 };
 
-const COLUMN_TONES = [
-  "linear-gradient(90deg, #7cb6ff, #b39dff)",
-  "linear-gradient(90deg, #ff9ccb, #ffc08a)",
-  "linear-gradient(90deg, #ffd969, #9fe8c6)",
-];
-
-const COLUMN_WASH = [
-  "linear-gradient(180deg, rgba(156, 200, 255, 0.26), rgba(255, 255, 255, 0.92) 46%)",
-  "linear-gradient(180deg, rgba(255, 179, 217, 0.26), rgba(255, 255, 255, 0.92) 46%)",
-  "linear-gradient(180deg, rgba(255, 224, 138, 0.28), rgba(255, 255, 255, 0.92) 46%)",
-];
-
 export default function ColumnView({
   column,
   index,
@@ -68,13 +56,13 @@ export default function ColumnView({
           ? "border-accent/70"
           : "border-[#e2d6f2]",
       ].join(" ")}
-      style={{ backgroundImage: COLUMN_WASH[index % COLUMN_WASH.length] }}
+      style={{ backgroundImage: `var(--wash-${index % 3})` }}
       aria-label={`${column.title} kolonu`}
     >
       <span
         aria-hidden
         className="absolute inset-x-0 top-0 h-1"
-        style={{ backgroundImage: COLUMN_TONES[index % COLUMN_TONES.length] }}
+        style={{ backgroundImage: `var(--top-${index % 3})` }}
       />
       <header className="flex items-center gap-2 px-3 pt-3 pb-2">
         {renaming ? (

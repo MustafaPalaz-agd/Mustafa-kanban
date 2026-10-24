@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-  /* Açık tema: fildişi zemin + mavi / pembe / sarı geçişler */
   --color-ink: #fbf8fd;
   --color-canvas: #f7f2fb;
   --color-panel: #ffffff;
@@ -24,19 +23,9 @@
   --font-mono: "Cascadia Mono", Consolas, ui-monospace, monospace;
 }
 
-html,
-body,
-#root {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-  color-scheme: light;
-  color: var(--color-strong);
-  font-family: var(--font-sans);
-  background-color: #fbf8fd;
-  background-image:
+/* Tema değerleri JS ile <html> üzerine yazılır; bunlar ilk boyama için varsayılan. */
+:root {
+  --theme-page:
     radial-gradient(
       62rem 42rem at 6% -12%,
       rgba(150, 197, 255, 0.55),
@@ -53,23 +42,74 @@ body {
       transparent 66%
     ),
     linear-gradient(180deg, #fdfbff 0%, #faf6ff 100%);
+  --wash-0: linear-gradient(
+    180deg,
+    rgba(156, 200, 255, 0.26),
+    rgba(255, 255, 255, 0.92) 46%
+  );
+  --wash-1: linear-gradient(
+    180deg,
+    rgba(255, 179, 217, 0.26),
+    rgba(255, 255, 255, 0.92) 46%
+  );
+  --wash-2: linear-gradient(
+    180deg,
+    rgba(255, 224, 138, 0.28),
+    rgba(255, 255, 255, 0.92) 46%
+  );
+  --top-0: linear-gradient(90deg, #7cb6ff, #b39dff);
+  --top-1: linear-gradient(90deg, #ff9ccb, #ffc08a);
+  --top-2: linear-gradient(90deg, #ffd969, #9fe8c6);
+  --btn-grad: linear-gradient(
+    105deg,
+    #a9d2ff 0%,
+    #ffb3d9 52%,
+    #ffe49a 100%
+  );
+  --btn-ink: #241f36;
+  --brand-grad: linear-gradient(
+    100deg,
+    #3f86c9 0%,
+    #d1519a 55%,
+    #b07b16 100%
+  );
+  --color-focus: #6ea8ef;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  color-scheme: light;
+  color: var(--color-strong);
+  font-family: var(--font-sans);
+  background-color: var(--color-ink);
+  background-image: var(--theme-page);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-/* Kağıt kart: beyaz, hafif lila kenar, yumuşak gölge */
+/* Kağıt kart yüzeyi */
 .paper-card {
-  background-image: linear-gradient(180deg, #ffffff, #fdfaff);
+  background-image: linear-gradient(
+    180deg,
+    var(--color-paper-2),
+    var(--color-paper)
+  );
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 1px 0 rgba(255, 255, 255, 0.35) inset,
     0 2px 4px rgba(84, 62, 122, 0.08),
     0 12px 24px -18px rgba(84, 62, 122, 0.45);
 }
 
 .paper-card:hover {
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 1px 0 rgba(255, 255, 255, 0.35) inset,
     0 4px 8px rgba(84, 62, 122, 0.1),
     0 18px 32px -20px rgba(84, 62, 122, 0.55);
 }
@@ -78,22 +118,17 @@ body {
 .rail-column {
   backdrop-filter: blur(10px);
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    0 1px 0 rgba(255, 255, 255, 0.35) inset,
     0 2px 6px rgba(84, 62, 122, 0.06),
     0 18px 36px -22px rgba(72, 52, 110, 0.45);
 }
 
-/* Birincil buton: mavi -> pembe -> sarı geçiş */
+/* Birincil buton */
 .btn-primary {
-  background-image: linear-gradient(
-    105deg,
-    #a9d2ff 0%,
-    #ffb3d9 52%,
-    #ffe49a 100%
-  );
-  color: #241f36;
+  background-image: var(--btn-grad);
+  color: var(--btn-ink);
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.75) inset,
+    0 1px 0 rgba(255, 255, 255, 0.45) inset,
     0 10px 20px -14px rgba(120, 90, 180, 0.85);
   transition:
     filter 160ms ease,
@@ -108,20 +143,14 @@ body {
   transform: translateY(1px);
 }
 
-/* Marka yazısı: geçişli metin */
+/* Marka yazısı */
 .grad-text {
-  background-image: linear-gradient(
-    100deg,
-    #3f86c9 0%,
-    #d1519a 55%,
-    #b07b16 100%
-  );
+  background-image: var(--brand-grad);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* İnce kaydırma çubuğu */
 * {
   scrollbar-width: thin;
   scrollbar-color: #cfc3e4 transparent;
@@ -142,7 +171,7 @@ body {
 }
 
 *:focus-visible {
-  outline: 2px solid #6ea8ef;
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 

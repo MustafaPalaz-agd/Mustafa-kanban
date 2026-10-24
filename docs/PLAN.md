@@ -98,6 +98,12 @@ Detay ve örnekler: `docs/API.md`.
 7. **Frontend'de sabit veri yok.** Tüm liste API'den; optimistic güncelleme
    yalnızca önbellek üzerinde.
 8. **Kimlikler:** `crypto.randomUUID()`.
+9. **Boş açılış:** İlk açılışta pano boştur; tablo arayüzdeki “Yeni tablo
+   oluştur” akışıyla (3 boş kolon) `POST /api/import` üzerinden kurulur.
+10. **Tema motoru:** 7 tema (`Varsayılan`, `Vaporwave`, `Cottagecore`,
+    `Dark Academia`, `Y2K`, `Cyberpunk`, `Coquette`) aynı CSS değişkenlerini
+    besler. Seçim `localStorage`'da tutulur; yeni tema eklemek tek dosya
+    (`web/src/lib/themes.ts`) değişikliğidir.
 
 ## 6. Yapım sırası
 
@@ -123,5 +129,6 @@ Detay ve örnekler: `docs/API.md`.
 | 3–5. Kolon/kart uçları + move invariant | tamam |
 | 6. Arama/filtre + import/export | tamam |
 | 7. Arayüz + dnd-kit + modal + klavye + 120 kart provası | tamam |
+| 8. Boş açılış + “Yeni tablo oluştur” + 7 tema | tamam |
 
 Kanıt: `docs/KANIT.md`.

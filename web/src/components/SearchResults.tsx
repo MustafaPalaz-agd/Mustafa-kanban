@@ -52,7 +52,7 @@ export default function SearchResults({
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-6">
-      <div className="rounded-2xl border border-[#e2d6f2] bg-white/70 p-4 backdrop-blur">
+      <div className="rounded-2xl border border-[#e2d6f2] bg-panel/70 p-4 backdrop-blur">
         <div className="flex items-baseline justify-between px-1">
           <h2 className="font-display text-lg text-strong">
             {cards.length} kart eşleşti
@@ -66,7 +66,7 @@ export default function SearchResults({
           </button>
         </div>
 
-        <ul className="mt-3 overflow-hidden rounded-xl border border-line bg-white">
+        <ul className="mt-3 overflow-hidden rounded-xl border border-line bg-panel">
           {cards.map((card) => {
             const overdue = isOverdue(card.dueDate);
             return (

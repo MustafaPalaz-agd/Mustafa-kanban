@@ -11,6 +11,7 @@ type Props = {
   onLabel: (value: string) => void;
   onClear: () => void;
   onNewCard: () => void;
+  onThemes: () => void;
 };
 
 export default function Toolbar({
@@ -24,9 +25,10 @@ export default function Toolbar({
   onLabel,
   onClear,
   onNewCard,
+  onThemes,
 }: Props) {
   return (
-    <header className="border-b border-line/80 bg-white/70 backdrop-blur">
+    <header className="border-b border-line/80 bg-panel/70 backdrop-blur">
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
         <div className="flex items-baseline gap-2.5">
           <span className="grad-text font-display text-[22px] leading-none">
@@ -83,6 +85,19 @@ export default function Toolbar({
               Filtreyi temizle
             </button>
           )}
+
+          <button
+            type="button"
+            onClick={onThemes}
+            title="Tema seç"
+            aria-label="Tema seç"
+            className="flex items-center gap-1.5 rounded-lg border border-line bg-panel/60 px-2 py-1.5 text-[12px] text-muted transition hover:border-accent/50 hover:text-strong"
+          >
+            <svg viewBox="0 0 16 16" aria-hidden className="size-3.5 fill-current">
+              <path d="M8 1.5a6.5 6.5 0 0 0 0 13h1.1a1.6 1.6 0 0 0 1.2-2.6 1.6 1.6 0 0 1 1.2-2.6H13a1.5 1.5 0 0 0 1.5-1.5A6.5 6.5 0 0 0 8 1.5Zm-3 4a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm3-1.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm3.5 1.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z" />
+            </svg>
+            <span className="hidden sm:inline">Tema</span>
+          </button>
 
           <button
             type="button"

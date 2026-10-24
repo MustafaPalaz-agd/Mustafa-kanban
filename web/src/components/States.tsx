@@ -9,7 +9,7 @@ export function LoadingState() {
       {[0, 1, 2].map((index) => (
         <div
           key={index}
-          className="w-[300px] shrink-0 rounded-xl border border-line/60 bg-white/60 p-3 sm:w-[320px]"
+          className="w-[300px] shrink-0 rounded-xl border border-line/60 bg-panel/60 p-3 sm:w-[320px]"
         >
           <div className="mb-3 h-3 w-24 animate-pulse rounded bg-strong/10" />
           {[0, 1, 2].map((card) => (

@@ -38,6 +38,21 @@ npm --prefix api run dev
 npm --prefix web run dev
 ```
 
+## İlk açılış — tablo ve tema
+
+Uygulama **boş panoyla** açılır: hiç kolon ya da kart yoktur.
+
+1. “Yeni tablo oluştur” düğmesine bas.
+2. Açılan pencereden bir tema seç (seçtiğin an arka planda uygulanır).
+3. “Tabloyu oluştur” → 3 kolonluk boş pano kurulur.
+
+Tema seçenekleri: **Varsayılan** (mavi–pembe–sarı), **Vaporwave**,
+**Cottagecore**, **Dark Academia**, **Y2K**, **Cyberpunk**, **Coquette**.
+Tema üst çubuktaki “Tema” düğmesinden sonradan değiştirilebilir ve tarayıcıda
+hatırlanır. Tüm temalar aynı CSS değişkenlerini besler (`web/src/lib/themes.ts`).
+
+Tüm kolonları silersen pano yeniden “Yeni tablo oluştur” ekranına döner.
+
 ## Sözleşme testi
 
 ```bash
@@ -59,9 +74,16 @@ npm run db:check   # verinin gerçekten SQLite dosyasında olduğunu doğrular
 `seed:big` sunucu açıkken çalıştırılır; mevcut panoyu değiştirir. Geri dönmek
 için `npm run seed`.
 
-## Başlangıç verisi
+## Başlangıç verisi (isteğe bağlı)
 
-`data/board.json` içinde 3 kolon / 9 kart hazır pano vardır.
+`data/board.json` içinde 3 kolon / 9 kart hazır demo panosu vardır. Uygulama
+boş açıldığı için otomatik yüklenmez; juri/demo için:
+
+```bash
+npm run seed
+```
+
+veya doğrudan API:
 
 ```bash
 curl -s -X POST localhost:3001/api/import \

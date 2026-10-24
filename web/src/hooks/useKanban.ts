@@ -4,6 +4,12 @@ import type { Board, Card, CardInput, CardPatch } from "../api/types";
 
 export const BOARD_KEY = ["board"] as const;
 
+const STARTER_COLUMNS = [
+  { title: "Yapılacak" },
+  { title: "Devam Ediyor" },
+  { title: "Tamamlandı" },
+];
+
 export type Notify = (message: string, tone?: "info" | "error") => void;
 
 export type MoveVariables = { id: string; toColumnId: string; toIndex: number };
@@ -62,6 +68,16 @@ export function useKanban(notify: Notify) {
     return queryClient.getQueryData<Board>(BOARD_KEY);
   };
 
+  const createBoard = useMutation({
+    mutationFn: () => api.importBoard(STARTER_COLUMNS),
+    onSuccess: () => {
+      void invalidate();
+      notify("Tablo oluşturuldu");
+    },
+    onError: (error) =>
+      notify(`Tablo oluşturulamadı: ${errorMessage(error)}`, "error"),
+  });
+
   const moveCard = useMutation({
     mutationFn: (vars: MoveVariables) =>
       api.moveCard(vars.id, vars.toColumnId, vars.toIndex),
@@ -81,8 +97,7 @@ export function useKanban(notify: Notify) {
     onSettled: invalidate,
   });
 
-  const createColumn = useMutation({
-    mutationFn: (title: string) => api.createColumn(title),
+  const createColumn = useMutation({    mutationFn: (title: string) => api.createColumn(title),
     onSuccess: () => {
       invalidate();
       notify("Kolon eklendi");
@@ -212,6 +227,7 @@ export function useKanban(notify: Notify) {
 
   return {
     board,
+    createBoard,
     moveCard,
     createColumn,
     updateColumn,

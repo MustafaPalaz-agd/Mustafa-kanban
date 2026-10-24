@@ -79,7 +79,7 @@ export default function CardModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-strong/35 p-4 pt-[8vh] backdrop-blur-[2px] sm:items-center sm:pt-4"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-[#120d1f]/45 p-4 pt-[8vh] backdrop-blur-[2px] sm:items-center sm:pt-4"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}

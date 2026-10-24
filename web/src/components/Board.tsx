@@ -102,7 +102,7 @@ export default function Board({
     >
       <div className="flex h-full items-start gap-3 overflow-x-auto overflow-y-hidden px-4 pt-1 pb-5 sm:gap-4">
         {board.columns.length === 0 && (
-          <div className="mt-6 w-full max-w-md rounded-2xl border border-dashed border-line bg-white/70 p-6 backdrop-blur">
+          <div className="mt-6 w-full max-w-md rounded-2xl border border-dashed border-line bg-panel/70 p-6 backdrop-blur">
             <h2 className="font-display text-xl text-strong">Pano boş</h2>
             <p className="mt-2 text-[13px] leading-relaxed text-muted">
               Henüz kolon yok. İlk kolonu oluştur, sonra kartları sürüklemeye
@@ -123,7 +123,7 @@ export default function Board({
                     }
                   }}
                   placeholder="Kolon adı…"
-                  className="min-w-0 flex-1 rounded-lg border border-line bg-white px-2.5 py-1.5 text-[13px] text-strong placeholder:text-muted/60 focus:border-accent/60 focus:outline-none"
+                  className="min-w-0 flex-1 rounded-lg border border-line bg-canvas px-2.5 py-1.5 text-[13px] text-strong placeholder:text-muted/60 focus:border-accent/60 focus:outline-none"
                   aria-label="Yeni kolon adı"
                 />
                 <button
@@ -161,7 +161,7 @@ export default function Board({
         {board.columns.length > 0 && (
           <div className="w-[260px] shrink-0">
             {addingColumn ? (
-            <div className="rounded-xl border border-accent/40 bg-rail p-2">
+            <div className="rounded-xl border border-accent/40 bg-panel p-2">
               <input
                 autoFocus
                 value={columnTitle}

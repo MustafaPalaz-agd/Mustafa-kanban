@@ -88,4 +88,10 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ toColumnId, toIndex }),
     }),
+
+  importBoard: (columns: Array<{ title: string }>) =>
+    request<{ ok: boolean }>("/api/import", {
+      method: "POST",
+      body: JSON.stringify({ board: { columns } }),
+    }),
 };

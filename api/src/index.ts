@@ -5,7 +5,6 @@ import express, {
 } from "express";
 import cors from "cors";
 import { ApiError } from "./lib/errors";
-import { seedIfEmpty } from "./lib/board";
 import { columnsRouter } from "./routes/columns";
 import { cardsRouter } from "./routes/cards";
 import { dataRouter } from "./routes/data";
@@ -61,10 +60,8 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
 
 const PORT = 3001;
 
-const seeded = seedIfEmpty();
-
 app.listen(PORT, () => {
   console.log(
-    `[api] http://localhost:${PORT} hazir${seeded ? " (data/board.json yuklendi)" : ""}`,
+    `[api] http://localhost:${PORT} hazir — pano bos baslar, tablo arayuzden kurulur`,
   );
 });

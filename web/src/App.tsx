@@ -4,10 +4,14 @@ import { api } from "./api/client";
 import type { Card, Column, SearchCard } from "./api/types";
 import Board from "./components/Board";
 import CardModal, { type CardFormValues } from "./components/CardModal";
+import CreateBoardModal from "./components/CreateBoardModal";
 import SearchResults from "./components/SearchResults";
 import { ErrorState, LoadingState } from "./components/States";
+import ThemeModal from "./components/ThemeModal";
 import Toolbar from "./components/Toolbar";
+import WelcomeScreen from "./components/WelcomeScreen";
 import { useKanban } from "./hooks/useKanban";
+import { applyTheme, readStoredTheme, storeTheme } from "./lib/themes";
 
 type ModalState = {
   mode: "create" | "edit";
@@ -22,7 +26,15 @@ export default function App() {
   const [label, setLabel] = useState("");
   const [modal, setModal] = useState<ModalState | null>(null);
   const [toast, setToast] = useState<Toast | null>(null);
+  const [theme, setTheme] = useState<string>(() => readStoredTheme());
+  const [showCreate, setShowCreate] = useState(false);
+  const [showThemes, setShowThemes] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    applyTheme(theme);
+    storeTheme(theme);
+  }, [theme]);
 
   const notify = useCallback(
     (message: string, tone: "info" | "error" = "info") => {
@@ -34,6 +46,10 @@ export default function App() {
   const kanban = useKanban(notify);
   const board = kanban.board.data;
   const columns = board?.columns ?? [];
+  const boardEmpty =
+    !kanban.board.isPending &&
+    !kanban.board.isError &&
+    columns.length === 0;
 
   useEffect(() => {
     if (!toast) return;
@@ -98,7 +114,7 @@ export default function App() {
         return;
       }
 
-      if (typing || modal) return;
+      if (typing || modal || boardEmpty) return;
 
       if (event.key === "/") {
         event.preventDefault();
@@ -114,7 +130,7 @@ export default function App() {
 
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [filterActive, modal, openCreate]);
+  }, [boardEmpty, filterActive, modal, openCreate]);
 
   const clearFilters = () => {
     setQ("");
@@ -165,18 +181,21 @@ export default function App() {
 
   return (
     <div className="flex h-full flex-col">
-      <Toolbar
-        searchRef={searchRef}
-        q={q}
-        label={label}
-        labels={labels}
-        filterActive={filterActive}
-        totalCards={totalCards}
-        onQ={setQ}
-        onLabel={setLabel}
-        onClear={clearFilters}
-        onNewCard={() => openCreate()}
-      />
+      {!boardEmpty && (
+        <Toolbar
+          searchRef={searchRef}
+          q={q}
+          label={label}
+          labels={labels}
+          filterActive={filterActive}
+          totalCards={totalCards}
+          onQ={setQ}
+          onLabel={setLabel}
+          onClear={clearFilters}
+          onNewCard={() => openCreate()}
+          onThemes={() => setShowThemes(true)}
+        />
+      )}
 
       <main className="min-h-0 flex-1 overflow-hidden">
         {kanban.board.isPending ? (
@@ -187,6 +206,11 @@ export default function App() {
           <ErrorState
             message={kanban.board.error.message}
             onRetry={() => void kanban.board.refetch()}
+          />
+        ) : boardEmpty ? (
+          <WelcomeScreen
+            themeId={theme}
+            onCreate={() => setShowCreate(true)}
           />
         ) : filterActive ? (
           <div className="h-full overflow-y-auto">
@@ -222,25 +246,29 @@ export default function App() {
         )}
       </main>
 
-      <footer className="flex items-center justify-between gap-4 border-t border-line/60 bg-white/40 px-4 py-1.5 text-[10.5px] text-muted/80 backdrop-blur">
-        <span className="truncate">
-          Kartı tut ve başka kolona bırak · düzenlemek için tıkla
-        </span>
-        <span className="hidden shrink-0 items-center gap-3 sm:flex">
-          <span>
-            <kbd className="rounded border border-line px-1 font-mono">N</kbd>{" "}
-            yeni kart
+      {!boardEmpty && (
+        <footer className="flex items-center justify-between gap-4 border-t border-line/60 bg-panel/40 px-4 py-1.5 text-[10.5px] text-muted/80 backdrop-blur">
+          <span className="truncate">
+            Kartı tut ve başka kolona bırak · düzenlemek için tıkla
           </span>
-          <span>
-            <kbd className="rounded border border-line px-1 font-mono">/</kbd>{" "}
-            ara
+          <span className="hidden shrink-0 items-center gap-3 sm:flex">
+            <span>
+              <kbd className="rounded border border-line px-1 font-mono">N</kbd>{" "}
+              yeni kart
+            </span>
+            <span>
+              <kbd className="rounded border border-line px-1 font-mono">/</kbd>{" "}
+              ara
+            </span>
+            <span>
+              <kbd className="rounded border border-line px-1 font-mono">
+                Esc
+              </kbd>{" "}
+              kapat
+            </span>
           </span>
-          <span>
-            <kbd className="rounded border border-line px-1 font-mono">Esc</kbd>{" "}
-            kapat
-          </span>
-        </span>
-      </footer>
+        </footer>
+      )}
 
       {modal && (
         <CardModal
@@ -258,6 +286,28 @@ export default function App() {
         />
       )}
 
+      {showCreate && (
+        <CreateBoardModal
+          themeId={theme}
+          busy={kanban.createBoard.isPending}
+          onThemeChange={setTheme}
+          onCreate={() =>
+            kanban.createBoard.mutate(undefined, {
+              onSuccess: () => setShowCreate(false),
+            })
+          }
+          onClose={() => setShowCreate(false)}
+        />
+      )}
+
+      {showThemes && (
+        <ThemeModal
+          value={theme}
+          onChange={setTheme}
+          onClose={() => setShowThemes(false)}
+        />
+      )}
+
       {toast && (
         <div
           role="status"
@@ -265,8 +315,8 @@ export default function App() {
           className={[
             "fixed right-4 bottom-10 z-50 max-w-sm rounded-xl border px-3.5 py-2.5 text-[12.5px] shadow-[0_18px_44px_-24px_rgba(60,40,100,0.65)] backdrop-blur",
             toast.tone === "error"
-              ? "border-danger/40 bg-white/95 text-danger"
-              : "border-line bg-white/95 text-strong",
+              ? "border-danger/40 bg-panel/95 text-danger"
+              : "border-line bg-panel/95 text-strong",
           ].join(" ")}
         >
           {toast.message}
