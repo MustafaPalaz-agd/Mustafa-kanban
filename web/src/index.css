@@ -1,14 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #12141a;
-  --color-surface: #1a1d26;
-  --color-surface-2: #222633;
-  --color-line: #2e3342;
-  --color-accent: #6ee7b7;
-  --color-muted: #9aa3b2;
+  --color-ink: #0e1116;
+  --color-panel: #141820;
+  --color-rail: #1b2029;
+  --color-line: #272e3a;
+  --color-paper: #f4f0e6;
+  --color-paper-2: #fbf8f0;
+  --color-cardink: #1c1b18;
+  --color-accent: #e0a83c;
+  --color-accent-strong: #c9891f;
+  --color-danger: #d9714e;
+  --color-muted: #98a1b2;
+
   --font-sans:
     "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-display: "Palatino Linotype", "Iowan Old Style", Georgia, serif;
+  --font-mono: "Cascadia Mono", Consolas, ui-monospace, monospace;
 }
 
 html,
@@ -18,8 +26,90 @@ body,
 }
 
 body {
-  background: var(--color-ink);
-  color: #eef1f6;
+  margin: 0;
+  background-color: var(--color-ink);
+  background-image:
+    radial-gradient(
+      ellipse 120% 80% at 50% -20%,
+      rgba(224, 168, 60, 0.06),
+      transparent 60%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.012) 0px,
+      rgba(255, 255, 255, 0.012) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  color: #e9edf5;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Kağıt kart yüzeyi: üstten hafif ışık, altta ince gölge */
+.paper-card {
+  background-image: linear-gradient(
+    180deg,
+    var(--color-paper-2),
+    var(--color-paper)
+  );
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 1px 2px rgba(0, 0, 0, 0.28),
+    0 6px 14px -10px rgba(0, 0, 0, 0.5);
+}
+
+.rail-column {
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(0, 0, 0, 0.12)
+  );
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* İnce kaydırma çubuğu */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #38404f transparent;
+}
+
+*::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #38404f;
+  border-radius: 999px;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@keyframes slip-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slip-in {
+  animation: slip-in 220ms ease-out both;
 }
