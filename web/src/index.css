@@ -1,17 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ink: #0e1116;
-  --color-panel: #141820;
-  --color-rail: #1b2029;
-  --color-line: #272e3a;
-  --color-paper: #f4f0e6;
-  --color-paper-2: #fbf8f0;
-  --color-cardink: #1c1b18;
-  --color-accent: #e0a83c;
-  --color-accent-strong: #c9891f;
-  --color-danger: #d9714e;
-  --color-muted: #98a1b2;
+  /* Açık tema: fildişi zemin + mavi / pembe / sarı geçişler */
+  --color-ink: #fbf8fd;
+  --color-canvas: #f7f2fb;
+  --color-panel: #ffffff;
+  --color-rail: #ffffff;
+  --color-line: #e9e1f3;
+  --color-paper: #ffffff;
+  --color-paper-2: #fefcff;
+  --color-cardink: #241f36;
+  --color-strong: #241f36;
+  --color-accent: #ff8fc4;
+  --color-accent-strong: #ef6fae;
+  --color-sky: #7fb8f5;
+  --color-butter: #f6cf6a;
+  --color-danger: #d94869;
+  --color-muted: #6f6885;
 
   --font-sans:
     "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -27,52 +32,99 @@ body,
 
 body {
   margin: 0;
-  background-color: var(--color-ink);
+  color-scheme: light;
+  color: var(--color-strong);
+  font-family: var(--font-sans);
+  background-color: #fbf8fd;
   background-image:
     radial-gradient(
-      ellipse 120% 80% at 50% -20%,
-      rgba(224, 168, 60, 0.06),
-      transparent 60%
+      62rem 42rem at 6% -12%,
+      rgba(150, 197, 255, 0.55),
+      transparent 62%
     ),
-    repeating-linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 0.012) 0px,
-      rgba(255, 255, 255, 0.012) 1px,
-      transparent 1px,
-      transparent 3px
-    );
-  color: #e9edf5;
-  font-family: var(--font-sans);
+    radial-gradient(
+      52rem 36rem at 98% -4%,
+      rgba(255, 172, 212, 0.5),
+      transparent 62%
+    ),
+    radial-gradient(
+      48rem 32rem at 55% 112%,
+      rgba(255, 226, 148, 0.5),
+      transparent 66%
+    ),
+    linear-gradient(180deg, #fdfbff 0%, #faf6ff 100%);
+  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
-/* Kağıt kart yüzeyi: üstten hafif ışık, altta ince gölge */
+/* Kağıt kart: beyaz, hafif lila kenar, yumuşak gölge */
 .paper-card {
-  background-image: linear-gradient(
-    180deg,
-    var(--color-paper-2),
-    var(--color-paper)
-  );
+  background-image: linear-gradient(180deg, #ffffff, #fdfaff);
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.6) inset,
-    0 1px 2px rgba(0, 0, 0, 0.28),
-    0 6px 14px -10px rgba(0, 0, 0, 0.5);
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 2px 4px rgba(84, 62, 122, 0.08),
+    0 12px 24px -18px rgba(84, 62, 122, 0.45);
 }
 
+.paper-card:hover {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 4px 8px rgba(84, 62, 122, 0.1),
+    0 18px 32px -20px rgba(84, 62, 122, 0.55);
+}
+
+/* Kolon: buzlu cam panel */
 .rail-column {
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    0 2px 6px rgba(84, 62, 122, 0.06),
+    0 18px 36px -22px rgba(72, 52, 110, 0.45);
+}
+
+/* Birincil buton: mavi -> pembe -> sarı geçiş */
+.btn-primary {
   background-image: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.02),
-    rgba(0, 0, 0, 0.12)
+    105deg,
+    #a9d2ff 0%,
+    #ffb3d9 52%,
+    #ffe49a 100%
   );
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  color: #241f36;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.75) inset,
+    0 10px 20px -14px rgba(120, 90, 180, 0.85);
+  transition:
+    filter 160ms ease,
+    transform 160ms ease;
+}
+
+.btn-primary:hover {
+  filter: saturate(1.18) brightness(0.985);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+/* Marka yazısı: geçişli metin */
+.grad-text {
+  background-image: linear-gradient(
+    100deg,
+    #3f86c9 0%,
+    #d1519a 55%,
+    #b07b16 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 /* İnce kaydırma çubuğu */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #38404f transparent;
+  scrollbar-color: #cfc3e4 transparent;
 }
 
 *::-webkit-scrollbar {
@@ -81,13 +133,21 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-  background: #38404f;
+  background: #d8cceb;
   border-radius: 999px;
 }
 
+*::-webkit-scrollbar-thumb:hover {
+  background: #c7b8de;
+}
+
 *:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid #6ea8ef;
   outline-offset: 2px;
+}
+
+::selection {
+  background: rgba(255, 143, 196, 0.35);
 }
 
 @media (prefers-reduced-motion: reduce) {

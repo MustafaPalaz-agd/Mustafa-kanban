@@ -79,7 +79,7 @@ export default function CardModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-ink/75 p-4 pt-[8vh] backdrop-blur-sm sm:items-center sm:pt-4"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-strong/35 p-4 pt-[8vh] backdrop-blur-[2px] sm:items-center sm:pt-4"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
@@ -89,16 +89,23 @@ export default function CardModal({
     >
       <form
         onSubmit={submit}
-        className="w-full max-w-lg rounded-2xl border border-line bg-panel p-5 shadow-2xl"
+        className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-line bg-panel p-5 shadow-[0_30px_80px_-40px_rgba(60,40,100,0.6)]"
       >
+        <span
+          aria-hidden
+          className="absolute inset-x-0 top-0 h-1"
+          style={{
+            backgroundImage: "linear-gradient(90deg, #a9d2ff, #ffb3d9, #ffe49a)",
+          }}
+        />
         <div className="flex items-baseline justify-between gap-4">
-          <h2 className="font-display text-xl text-white">
+          <h2 className="font-display text-xl text-strong">
             {mode === "create" ? "Yeni kart" : "Kart detayı"}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            className="rounded p-1 text-muted hover:bg-white/10 hover:text-white"
+            className="rounded p-1 text-muted hover:bg-strong/10 hover:text-strong"
             aria-label="Kapat (Esc)"
           >
             <svg viewBox="0 0 16 16" className="size-4 fill-current">
@@ -124,7 +131,7 @@ export default function CardModal({
                 setError(null);
               }}
               placeholder="Örn. Sürükle-bırak testi"
-              className="w-full rounded-lg border border-line bg-ink/60 px-3 py-2 text-[13.5px] text-white placeholder:text-muted/50 focus:border-accent/60 focus:outline-none"
+              className="w-full rounded-lg border border-line bg-canvas px-3 py-2 text-[13.5px] text-strong placeholder:text-muted/50 focus:border-accent/60 focus:outline-none"
             />
           </div>
 
@@ -141,7 +148,7 @@ export default function CardModal({
               value={description}
               onChange={(event) => setDescription(event.target.value)}
               placeholder="Kartın ayrıntısı…"
-              className="w-full resize-y rounded-lg border border-line bg-ink/60 px-3 py-2 text-[13px] leading-relaxed text-white placeholder:text-muted/50 focus:border-accent/60 focus:outline-none"
+              className="w-full resize-y rounded-lg border border-line bg-canvas px-3 py-2 text-[13px] leading-relaxed text-strong placeholder:text-muted/50 focus:border-accent/60 focus:outline-none"
             />
           </div>
 
@@ -159,7 +166,7 @@ export default function CardModal({
                 value={label}
                 onChange={(event) => setLabel(event.target.value)}
                 placeholder="ör. frontend"
-                className="w-full rounded-lg border border-line bg-ink/60 px-3 py-2 text-[13px] text-white placeholder:text-muted/50 focus:border-accent/60 focus:outline-none"
+                className="w-full rounded-lg border border-line bg-canvas px-3 py-2 text-[13px] text-strong placeholder:text-muted/50 focus:border-accent/60 focus:outline-none"
               />
               <datalist id="label-options">
                 {labels.map((option) => (
@@ -180,7 +187,7 @@ export default function CardModal({
                 type="date"
                 value={dueDate}
                 onChange={(event) => setDueDate(event.target.value)}
-                className="w-full rounded-lg border border-line bg-ink/60 px-3 py-2 text-[13px] text-white [color-scheme:dark] focus:border-accent/60 focus:outline-none"
+                className="w-full rounded-lg border border-line bg-canvas px-3 py-2 text-[13px] text-strong focus:border-accent/60 focus:outline-none"
               />
             </div>
           </div>
@@ -197,7 +204,7 @@ export default function CardModal({
                 id="card-column"
                 value={selectedColumn}
                 onChange={(event) => setSelectedColumn(event.target.value)}
-                className="w-full rounded-lg border border-line bg-ink/60 px-3 py-2 text-[13px] text-white focus:border-accent/60 focus:outline-none"
+                className="w-full rounded-lg border border-line bg-canvas px-3 py-2 text-[13px] text-strong focus:border-accent/60 focus:outline-none"
               >
                 {columns.map((column) => (
                   <option key={column.id} value={column.id}>
@@ -231,14 +238,14 @@ export default function CardModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg px-3 py-1.5 text-[12.5px] text-muted transition hover:bg-white/5 hover:text-white"
+              className="rounded-lg px-3 py-1.5 text-[12.5px] text-muted transition hover:bg-strong/5 hover:text-strong"
             >
               Vazgeç
             </button>
             <button
               type="submit"
               disabled={busy}
-              className="rounded-lg bg-accent px-4 py-1.5 text-[12.5px] font-semibold text-ink transition hover:bg-accent-strong disabled:opacity-50"
+              className="btn-primary rounded-lg px-4 py-1.5 text-[12.5px] font-semibold disabled:opacity-50"
             >
               {mode === "create" ? "Kartı ekle" : "Değişiklikleri kaydet"}
             </button>

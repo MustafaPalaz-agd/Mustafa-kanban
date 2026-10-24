@@ -1,5 +1,6 @@
 import type { Card } from "../api/types";
 import { formatDue, isOverdue } from "../lib/date";
+import { labelTone } from "../lib/labels";
 
 type Props = {
   card: Card;
@@ -9,6 +10,7 @@ type Props = {
 
 export default function CardView({ card, onOpen, dragging = false }: Props) {
   const overdue = isOverdue(card.dueDate);
+  const tone = card.label ? labelTone(card.label) : null;
 
   return (
     <article
@@ -19,17 +21,29 @@ export default function CardView({ card, onOpen, dragging = false }: Props) {
       role={onOpen ? "button" : undefined}
       tabIndex={onOpen ? 0 : undefined}
       title={card.title}
+      style={
+        tone
+          ? {
+              borderLeftColor: tone,
+              borderLeftWidth: 3,
+              borderLeftStyle: "solid",
+            }
+          : undefined
+      }
       className={[
         "paper-card group relative w-full cursor-grab overflow-hidden rounded-[10px]",
         "border border-black/10 px-3 py-2.5 text-cardink transition",
         dragging
-          ? "rotate-[1.5deg] cursor-grabbing shadow-2xl"
+          ? "rotate-[1.5deg] cursor-grabbing shadow-[0_24px_50px_-18px_rgba(70,50,110,0.55)]"
           : "hover:-translate-y-px hover:border-black/20",
       ].join(" ")}
     >
       {card.label && (
-        <span className="mb-1 inline-flex items-center gap-1.5 rounded-sm bg-cardink/[0.06] px-1.5 py-0.5 text-[10.5px] leading-none font-medium tracking-wide text-cardink/75">
-          <span className="size-1.5 rounded-full bg-accent-strong" />
+        <span className="mb-1.5 inline-flex items-center gap-1.5 rounded-full bg-cardink/[0.05] px-2 py-0.5 text-[10.5px] leading-none font-medium tracking-wide text-cardink/75">
+          <span
+            className="size-1.5 rounded-full"
+            style={{ backgroundColor: labelTone(card.label) }}
+          />
           {card.label}
         </span>
       )}

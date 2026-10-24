@@ -222,7 +222,7 @@ export default function App() {
         )}
       </main>
 
-      <footer className="flex items-center justify-between gap-4 border-t border-line/60 px-4 py-1.5 text-[10.5px] text-muted/60">
+      <footer className="flex items-center justify-between gap-4 border-t border-line/60 bg-white/40 px-4 py-1.5 text-[10.5px] text-muted/80 backdrop-blur">
         <span className="truncate">
           Kartı tut ve başka kolona bırak · düzenlemek için tıkla
         </span>
@@ -263,10 +263,10 @@ export default function App() {
           role="status"
           aria-live="polite"
           className={[
-            "fixed right-4 bottom-10 z-50 max-w-sm rounded-lg border px-3.5 py-2.5 text-[12.5px] shadow-xl",
+            "fixed right-4 bottom-10 z-50 max-w-sm rounded-xl border px-3.5 py-2.5 text-[12.5px] shadow-[0_18px_44px_-24px_rgba(60,40,100,0.65)] backdrop-blur",
             toast.tone === "error"
-              ? "border-danger/50 bg-danger/15 text-danger"
-              : "border-accent/30 bg-panel text-white",
+              ? "border-danger/40 bg-white/95 text-danger"
+              : "border-line bg-white/95 text-strong",
           ].join(" ")}
         >
           {toast.message}

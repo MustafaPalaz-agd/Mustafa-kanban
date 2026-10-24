@@ -12,12 +12,15 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(path, {
-    ...init,
-    headers: init?.body
-      ? { "content-type": "application/json" }
-      : undefined,
-  });
+  let response: Response;
+  try {
+    response = await fetch(path, {
+      ...init,
+      headers: init?.body ? { "content-type": "application/json" } : undefined,
+    });
+  } catch {
+    throw new ApiError("Sunucuya ulaşılamadı.", 0, "NETWORK");
+  }
 
   if (response.status === 204) {
     return undefined as T;

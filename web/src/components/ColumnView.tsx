@@ -9,14 +9,28 @@ import SortableCard from "./SortableCard";
 
 type Props = {
   column: Column;
+  index: number;
   onOpenCard: (card: Card, columnId: string) => void;
   onCreateCard: (columnId: string, title: string) => void;
   onRename: (columnId: string, title: string) => void;
   onDelete: (column: Column) => void;
 };
 
+const COLUMN_TONES = [
+  "linear-gradient(90deg, #7cb6ff, #b39dff)",
+  "linear-gradient(90deg, #ff9ccb, #ffc08a)",
+  "linear-gradient(90deg, #ffd969, #9fe8c6)",
+];
+
+const COLUMN_WASH = [
+  "linear-gradient(180deg, rgba(156, 200, 255, 0.26), rgba(255, 255, 255, 0.92) 46%)",
+  "linear-gradient(180deg, rgba(255, 179, 217, 0.26), rgba(255, 255, 255, 0.92) 46%)",
+  "linear-gradient(180deg, rgba(255, 224, 138, 0.28), rgba(255, 255, 255, 0.92) 46%)",
+];
+
 export default function ColumnView({
   column,
+  index,
   onOpenCard,
   onCreateCard,
   onRename,
@@ -49,13 +63,19 @@ export default function ColumnView({
   return (
     <section
       className={[
-        "rail-column group/card flex h-full max-h-full min-h-[460px] w-[300px] shrink-0 flex-col rounded-xl border transition-colors sm:w-[320px]",
+        "rail-column group/card relative flex h-full max-h-full min-h-[460px] w-[300px] shrink-0 flex-col overflow-hidden rounded-2xl border transition-colors sm:w-[320px]",
         isOver
-          ? "border-accent/60 bg-accent/[0.04]"
-          : "border-line/80",
+          ? "border-accent/70"
+          : "border-[#e2d6f2]",
       ].join(" ")}
+      style={{ backgroundImage: COLUMN_WASH[index % COLUMN_WASH.length] }}
       aria-label={`${column.title} kolonu`}
     >
+      <span
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-1"
+        style={{ backgroundImage: COLUMN_TONES[index % COLUMN_TONES.length] }}
+      />
       <header className="flex items-center gap-2 px-3 pt-3 pb-2">
         {renaming ? (
           <input
@@ -70,20 +90,20 @@ export default function ColumnView({
                 setRenaming(false);
               }
             }}
-            className="min-w-0 flex-1 rounded border border-accent/50 bg-ink/60 px-2 py-1 text-[13px] font-semibold text-white"
+            className="min-w-0 flex-1 rounded border border-accent/50 bg-canvas px-2 py-1 text-[13px] font-semibold text-strong"
             aria-label="Kolon adı"
           />
         ) : (
           <h3
             onDoubleClick={() => setRenaming(true)}
-            className="min-w-0 flex-1 truncate text-[12px] font-semibold tracking-[0.02em] text-white/90"
+            className="min-w-0 flex-1 truncate text-[12px] font-semibold tracking-[0.02em] text-strong/90"
             title="Yeniden adlandırmak için çift tıkla"
           >
             {column.title}
           </h3>
         )}
 
-        <span className="rounded-full bg-white/[0.06] px-1.5 py-0.5 font-mono text-[10px] text-muted">
+        <span className="rounded-full bg-strong/[0.06] px-1.5 py-0.5 font-mono text-[10px] text-muted">
           {column.cards.length}
         </span>
 
@@ -94,7 +114,7 @@ export default function ColumnView({
               setDraftTitle(column.title);
               setRenaming(true);
             }}
-            className="rounded p-1 text-muted hover:bg-white/10 hover:text-white"
+            className="rounded p-1 text-muted hover:bg-strong/10 hover:text-strong"
             aria-label="Kolonu yeniden adlandır"
             title="Yeniden adlandır"
           >
@@ -141,7 +161,7 @@ export default function ColumnView({
         )}
 
         {adding ? (
-          <div className="rounded-lg border border-accent/40 bg-ink/50 p-2">
+          <div className="rounded-lg border border-accent/40 bg-canvas p-2">
             <textarea
               autoFocus
               rows={2}
@@ -158,13 +178,13 @@ export default function ColumnView({
                 }
               }}
               placeholder="Kart başlığı…"
-              className="w-full resize-none bg-transparent text-[12.5px] text-white placeholder:text-muted/60 focus:outline-none"
+              className="w-full resize-none bg-transparent text-[12.5px] text-strong placeholder:text-muted/60 focus:outline-none"
             />
             <div className="mt-1 flex items-center gap-2">
               <button
                 type="button"
                 onClick={commitCard}
-                className="rounded bg-accent px-2.5 py-1 text-[11.5px] font-semibold text-ink hover:bg-accent-strong"
+                className="btn-primary rounded px-3 py-1 text-[11.5px] font-semibold"
               >
                 Ekle
               </button>
@@ -174,7 +194,7 @@ export default function ColumnView({
                   setDraftCard("");
                   setAdding(false);
                 }}
-                className="text-[11.5px] text-muted hover:text-white"
+                className="text-[11.5px] text-muted hover:text-strong"
               >
                 Vazgeç
               </button>
@@ -184,7 +204,7 @@ export default function ColumnView({
           <button
             type="button"
             onClick={() => setAdding(true)}
-            className="mt-1 flex items-center gap-1.5 rounded-lg px-2 py-2 text-left text-[11.5px] text-muted transition hover:bg-white/5 hover:text-white"
+            className="mt-1 flex items-center gap-1.5 rounded-lg px-2 py-2 text-left text-[11.5px] text-muted transition hover:bg-strong/5 hover:text-strong"
           >
             <svg viewBox="0 0 16 16" className="size-3.5 fill-current">
               <path d="M8 2.5a.9.9 0 0 1 .9.9V7h3.6a.9.9 0 0 1 0 1.8H8.9v3.6a.9.9 0 0 1-1.8 0V8.8H3.5a.9.9 0 0 1 0-1.8h3.6V3.4A.9.9 0 0 1 8 2.5Z" />

@@ -26,15 +26,15 @@ export default function Toolbar({
   onNewCard,
 }: Props) {
   return (
-    <header className="border-b border-line/80 bg-panel/70 backdrop-blur">
+    <header className="border-b border-line/80 bg-white/70 backdrop-blur">
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
         <div className="flex items-baseline gap-2.5">
-          <span className="font-display text-[22px] leading-none text-white">
+          <span className="grad-text font-display text-[22px] leading-none">
             Tahta
           </span>
           <span className="text-[11px] text-muted">
             Kanban panosu ·{" "}
-            <span className="font-mono text-white/70">{totalCards}</span> kart
+            <span className="font-mono text-strong/70">{totalCards}</span> kart
           </span>
         </div>
 
@@ -53,7 +53,7 @@ export default function Toolbar({
               onChange={(event) => onQ(event.target.value)}
               placeholder="Kart ara"
               aria-label="Kartlarda ara"
-              className="w-44 rounded-lg border border-line bg-ink/60 py-1.5 pr-8 pl-8 text-[12.5px] text-white placeholder:text-muted/60 focus:border-accent/60 focus:outline-none sm:w-56"
+              className="w-44 rounded-lg border border-line bg-canvas py-1.5 pr-8 pl-8 text-[12.5px] text-strong placeholder:text-muted/60 focus:border-accent/60 focus:outline-none sm:w-56"
             />
             <kbd className="pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 rounded border border-line px-1 font-mono text-[9.5px] text-muted">
               /
@@ -64,7 +64,7 @@ export default function Toolbar({
             value={label}
             onChange={(event) => onLabel(event.target.value)}
             aria-label="Etikete göre filtrele"
-            className="rounded-lg border border-line bg-ink/60 px-2 py-1.5 text-[12.5px] text-white focus:border-accent/60 focus:outline-none"
+            className="rounded-lg border border-line bg-canvas px-2 py-1.5 text-[12.5px] text-strong focus:border-accent/60 focus:outline-none"
           >
             <option value="">Tüm etiketler</option>
             {labels.map((option) => (
@@ -78,7 +78,7 @@ export default function Toolbar({
             <button
               type="button"
               onClick={onClear}
-              className="rounded-lg border border-line px-2 py-1.5 text-[12px] text-muted transition hover:border-accent/50 hover:text-white"
+              className="rounded-lg border border-line px-2 py-1.5 text-[12px] text-muted transition hover:border-accent/50 hover:text-strong"
             >
               Filtreyi temizle
             </button>
@@ -87,15 +87,19 @@ export default function Toolbar({
           <button
             type="button"
             onClick={onNewCard}
-            className="flex items-center gap-2 rounded-lg bg-accent px-3 py-1.5 text-[12.5px] font-semibold text-ink transition hover:bg-accent-strong"
+            className="btn-primary flex items-center gap-2 rounded-lg px-3 py-1.5 text-[12.5px] font-semibold"
           >
             Yeni kart
-            <kbd className="rounded border border-ink/30 px-1 font-mono text-[9.5px] font-normal text-ink/70">
+            <kbd className="rounded border border-strong/25 px-1 font-mono text-[9.5px] font-normal text-strong/70">
               N
             </kbd>
           </button>
         </div>
       </div>
+      <div
+        aria-hidden
+        className="h-px w-full bg-gradient-to-r from-sky/70 via-accent/70 to-butter/70"
+      />
     </header>
   );
 }
